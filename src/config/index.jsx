@@ -22,6 +22,8 @@ export const registerFormControls = [
         type : 'password',
     },
 ]
+
+
 export const loginFormControls = [
     {
         name : 'email',
@@ -36,5 +38,5 @@ export const loginFormControls = [
         placeholder : 'Enter Your password',
         componentType : 'input',
         type : 'password',
-    },
+    }
 ]
