@@ -7,8 +7,12 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProductImageUpload from "../../components/admin-view/image-upload";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewProduct, fetchAllProducts } from "@/store/admin/products-slice";
+import { toast } from "sonner";
+
 
 const initialFormData = {
   image: null,
@@ -21,7 +25,7 @@ const initialFormData = {
   totalStock: "",
 };
 
-const onSubmit = (event) => {};
+
 
 const AdminProducts = () => {
   const [openCreateProductDialog, setOpenCreateProductDialog] = useState(false);
@@ -29,6 +33,30 @@ const AdminProducts = () => {
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
+  const {productList} = useSelector(state => state.adminProducts)
+  const dispatch = useDispatch();
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(addNewProduct({
+      ...formData,
+      image : uploadedImageUrl
+    })).then((data) => {
+      if(data?.payload?.success) {
+        dispatch(fetchAllProducts());
+        setImageFile(null);
+        setFormData(initialFormData)
+        setOpenCreateProductDialog(false)
+        toast("Product added successfully")
+      }
+    })
+  };
+
+  useEffect(() => {
+    dispatch(fetchAllProducts())
+  }, [dispatch])
+
+
 
   return (
     <>
@@ -53,6 +81,7 @@ const AdminProducts = () => {
               setImageFile={setImageFile}
               uploadedImageUrl={uploadedImageUrl}
               setUploadedImageUrl={setUploadedImageUrl}
+              imageLoadingState={imageLoadingState}
               setImageLoadingState={setImageLoadingState}
             />
             <div className="py-6 ml-2">
