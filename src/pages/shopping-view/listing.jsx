@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { sortOptions } from "@/config";
+import { addTocart, fetchCartItems } from "@/store/shop/cart-slice";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
@@ -19,6 +20,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "sonner";
 
 const createSearchParamsHelper = (filtersParams) => {
   const queryParams = [];
@@ -33,9 +35,12 @@ const createSearchParamsHelper = (filtersParams) => {
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
+
   const { productList, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
+
+  const {user} = useSelector(state => state.auth)
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -71,6 +76,16 @@ const ShoppingListing = () => {
   const handleGetProductDetails = (id) => {
     dispatch(fetchProductDetails(id));
   };
+
+  const handleAddtoCart = (getCurrentProductId) => {
+    dispatch(addTocart({ userId : user?.id, productId : getCurrentProductId, quantity : 1 }))
+    .then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id))
+        toast("Product is Added to cart")
+      }
+    });
+  }
 
   useEffect(() => {
     if(productDetails !== null) setOpenDetailsDialog(true)
@@ -137,6 +152,7 @@ const ShoppingListing = () => {
                 <ShoppingProductTile
                   product={productItem}
                   handleGetProductDetails={handleGetProductDetails}
+                  handleAddtoCart={handleAddtoCart}
                 />
               ))
             : null}
