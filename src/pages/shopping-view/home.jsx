@@ -21,22 +21,29 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts, fetchProductDetails } from "@/store/shop/product-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/product-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
 import { addTocart, fetchCartItems } from "@/store/shop/cart-slice";
 import { toast } from "sonner";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { getFeatureImage } from "@/store/common-slice";
 
 const ShoppingHome = () => {
-  const slides = [bannerOne, bannerTwo, bannerThree];
+  const slides = featureImageList;
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
-  const { productList, productDetails } = useSelector((state) => state.shoppingProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shoppingProducts
+  );
+  const { featureImageList } = useSelector((state) => state.commonSlice);
+
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
-  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
-  
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const handleAddtoCart = (getCurrentProductId) => {
     dispatch(
@@ -53,9 +60,9 @@ const ShoppingHome = () => {
     });
   };
 
-    const handleGetProductDetails = (id) => {
-      dispatch(fetchProductDetails(id));
-    };
+  const handleGetProductDetails = (id) => {
+    dispatch(fetchProductDetails(id));
+  };
   const CategoriesWithIcons = [
     { id: "men", label: "Men", icon: ShirtIcon },
     { id: "women", label: "Women", icon: CloudLightning },
@@ -82,26 +89,26 @@ const ShoppingHome = () => {
   };
 
   const handleNavigateToListingPage = (getCurrentItem, section) => {
-    sessionStorage.removeItem('filters');
+    sessionStorage.removeItem("filters");
     const currentFilter = {
-      [section] : [getCurrentItem.id]
-    }
+      [section]: [getCurrentItem.id],
+    };
 
-    sessionStorage.setItem('filters', JSON.stringify(currentFilter))
-    navigate(`/shop/listing`)
-  }
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/listing`);
+  };
 
-    useEffect(() => {
-      if(productDetails !== null) setOpenDetailsDialog(true)
-    }, [productDetails])
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
-    }, 5000);
+    }, 3000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [featureImageList]);
 
   useEffect(() => {
     dispatch(
@@ -112,19 +119,25 @@ const ShoppingHome = () => {
     );
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(getFeatureImage());
+  }, [dispatch]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">
-        {slides.map((slide, idx) => (
-          <img
-            key={idx}
-            src={slide}
-            alt={`Slide ${idx}`}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
-              idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
-            }`}
-          />
-        ))}
+        {featureImageList && featureImageList.length > 0
+          ? featureImageList.map((slide, idx) => (
+              <img
+                key={idx}
+                src={slide?.image}
+                alt={`Slide ${idx}`}
+                className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                  idx === currentSlide ? "opacity-100 z-10" : "opacity-0 z-0"
+                }`}
+              />
+            ))
+          : null}
 
         <Button
           onClick={prevSlide}
@@ -152,7 +165,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {CategoriesWithIcons.map((item) => (
               <Card
-              onClick={()=> handleNavigateToListingPage(item, 'category')}
+                onClick={() => handleNavigateToListingPage(item, "category")}
                 key={item.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
@@ -171,8 +184,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {BrandWithIcons.map((item) => (
               <Card
-                onClick={()=> handleNavigateToListingPage(item, 'brand')}
-
+                onClick={() => handleNavigateToListingPage(item, "brand")}
                 key={item.id}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
@@ -194,15 +206,20 @@ const ShoppingHome = () => {
             {productList && productList.length > 0
               ? productList.map((productItem) => (
                   <ShoppingProductTile
-                  handleGetProductDetails={handleGetProductDetails}
-                  handleAddtoCart={handleAddtoCart}
-                  product={productItem} />
+                    handleGetProductDetails={handleGetProductDetails}
+                    handleAddtoCart={handleAddtoCart}
+                    product={productItem}
+                  />
                 ))
               : null}
           </div>
         </div>
       </section>
-    <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails} />
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 };
