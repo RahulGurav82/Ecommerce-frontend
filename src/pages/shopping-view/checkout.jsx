@@ -13,7 +13,7 @@ const ShoppingCheckout = () => {
   const { user } = useSelector(state => state.auth); 
   const { approvalUrl } = useSelector(state => state.shopOrder); 
   const [currentSelectedAddress, setcurrentSelectedAddress] = useState(null);
-  // const [isPaymentStart, setIsPaymentStart] = useState(false);
+  const [isPaymentStart, setIsPaymentStart] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -32,6 +32,7 @@ const ShoppingCheckout = () => {
 
   const handleInitiatePaypalPayment = () => {
 
+    setIsPaymentStart(true)
     if(currentSelectedAddress === null) {
       toast.success('Please Select one Address to procced');
       return;
@@ -91,7 +92,7 @@ const ShoppingCheckout = () => {
         alt="" />
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 mt-5 p-5'>
-        <Address setcurrentSelectedAddress={setcurrentSelectedAddress} />
+        <Address selectedId={currentSelectedAddress} setcurrentSelectedAddress={setcurrentSelectedAddress} />
         <div className='flex flex-col gap-4'>
           {
             cartItems && cartItems.items.length > 0 ?
@@ -104,7 +105,11 @@ const ShoppingCheckout = () => {
         </div>
       </div>
       <div mt-4 w-full>
-        <Button onClick={handleInitiatePaypalPayment} className='w-full'>Checkout with Paypal</Button>
+        <Button onClick={handleInitiatePaypalPayment} className='w-full'>
+          {
+            isPaymentStart ? "Payment Processing start" : "Checkout with Paypal"
+          }
+          </Button>
       </div>
         </div>
       </div>

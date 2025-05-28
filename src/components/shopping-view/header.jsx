@@ -1,6 +1,11 @@
 import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,21 +32,29 @@ const MenuItems = () => {
   const handleNavigate = (getCurrentMenuItem) => {
     sessionStorage.removeItem("filters");
     const currentFilter =
-      getCurrentMenuItem.id !== "home" && getCurrentMenuItem.id !== "products" && getCurrentMenuItem.id !== "search"
+      getCurrentMenuItem.id !== "home" &&
+      getCurrentMenuItem.id !== "products" &&
+      getCurrentMenuItem.id !== "search"
         ? {
             category: [getCurrentMenuItem.id],
           }
         : null;
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-    loaction.pathname.includes('listing') && currentFilter !== null 
-    ? setSearchParams(new URLSearchParams(`?category=${getCurrentMenuItem.id}`)) :
-    navigate(getCurrentMenuItem.path);
+    loaction.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(
+          new URLSearchParams(`?category=${getCurrentMenuItem.id}`)
+        )
+      : navigate(getCurrentMenuItem.path);
   };
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:flex-row gap-6 ml-4">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Label onClick={()=> handleNavigate(menuItem)} className="text-sm font-medium cursor-pointer" key={menuItem.id}>
+        <Label
+          onClick={() => handleNavigate(menuItem)}
+          className="text-sm font-medium cursor-pointer"
+          key={menuItem.id}
+        >
           {menuItem.label}
         </Label>
       ))}
@@ -71,12 +84,14 @@ const HeaderRightContent = () => {
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
           size="icon"
+          className="relative"
         >
+          <span className="absolute top-[-5px] right-[-2px] text-sm font-bold">{cartItems?.items?.length || 0}</span>
           <ShoppingCart className="h-6 w-6" />
           <span className="sr-only">User Cart Only</span>
         </Button>
         <UserCartWrapper
-        setOpenCartSheet={setOpenCartSheet}
+          setOpenCartSheet={setOpenCartSheet}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items

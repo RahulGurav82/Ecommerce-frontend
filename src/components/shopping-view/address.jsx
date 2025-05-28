@@ -20,7 +20,7 @@ const initialAddressFormdata = {
   notes: "",
 };
 
-const Address = ({setcurrentSelectedAddress}) => {
+const Address = ({setcurrentSelectedAddress, selectedId}) => {
   const [formData, setFormData] = useState(initialAddressFormdata);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -103,6 +103,7 @@ const Address = ({setcurrentSelectedAddress}) => {
         {addressList && addressList.length > 0
           ? addressList.map((singleAddress) => (
               <AddressCard
+                selectedId={selectedId}
                 addressInfo={singleAddress}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}
