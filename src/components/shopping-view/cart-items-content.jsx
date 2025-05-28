@@ -8,7 +8,10 @@ import { toast } from "sonner";
 const UserCartContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-
+  const {cartItems} = useSelector(state => state.shopCart)
+  const { productList } = useSelector(
+    (state) => state.shoppingProducts
+  );
   const handleCartItemDelete = (getCartItem) => {
     dispatch(
       deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
@@ -20,6 +23,24 @@ const UserCartContent = ({ cartItem }) => {
   };
 
   const handleUpdateQuantity = (getCartItem, typeOfAction) => {
+    if(typeOfAction == 'add') {
+          let getCartItems = cartItems.items || [];
+
+    if(getCartItems.length) {
+      const indexOfCurrentCartItem = getCartItems.findIndex(item => item.productId === getCartItem.productId);
+
+      const getCurrentProductIndex = productList.findIndex(product => product._id === getCartItem?.productId);
+      const getTotalStock = productList[getCurrentProductIndex].totalStock;
+      if(indexOfCurrentCartItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
+        if(getQuantity + 1 > getTotalStock) {
+          toast.warning(`only ${getQuantity} quantity can be added.`)
+          return
+        }
+      }
+    }
+    }
+
     dispatch(updateCartQuantity({userId : user?.id, productId : getCartItem?.productId, quantity : 
       typeOfAction === 'add' ?
       getCartItem?.quantity + 1 : getCartItem?.quantity - 1

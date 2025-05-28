@@ -45,7 +45,9 @@ const ShoppingListing = () => {
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+  const {cartItems} = useSelector(state => state.shopCart)
 
+  const categorySearchParams = searchParams.get('category')
   const handleSort = (value) => {
     setSort(value);
   };
@@ -77,7 +79,21 @@ const ShoppingListing = () => {
     dispatch(fetchProductDetails(id));
   };
 
-  const handleAddtoCart = (getCurrentProductId) => {
+  const handleAddtoCart = (getCurrentProductId, getTotalStock) => {
+
+    let getCartItems = cartItems.items || [];
+
+    if(getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(item => item.productId === getCurrentProductId);
+      if(indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if(getQuantity + 1 > getTotalStock) {
+          toast.warning(`only ${getQuantity} quantity can be added.`)
+          return
+        }
+      }
+    }
+
     dispatch(addTocart({ userId : user?.id, productId : getCurrentProductId, quantity : 1 }))
     .then((data) => {
       if (data?.payload?.success) {
@@ -94,7 +110,7 @@ const ShoppingListing = () => {
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
-  }, []);
+  }, [categorySearchParams]);
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
