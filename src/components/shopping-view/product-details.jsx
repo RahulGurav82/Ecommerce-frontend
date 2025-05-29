@@ -167,7 +167,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                     <div className="flex gap-6">
                       <Avatar className="w-10 h-10 border">
                         <AvatarFallback>
-                          {reviewItem?.username[0].toUppercase()}
+                          {reviewItem?.username[0].toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                       <div className="grid gap-1">

@@ -9,7 +9,7 @@ const AdminDashboard = () => {
     const [imageFile, setImageFile] = useState(null);
     const [uploadedImageUrl, setUploadedImageUrl] = useState("");
     const [imageLoadingState, setImageLoadingState] = useState(false);
-    const {featureImageList} = useSelector(state => state.commonSlice)
+    const {featureImageList} = useSelector(state => state.commonFeature)
   
     const dispatch = useDispatch();
 
@@ -43,8 +43,9 @@ const AdminDashboard = () => {
           <div className='flex flex-col gap-4 mt-5'>
             {
               featureImageList && featureImageList.length > 0 ? 
-              featureImageList.map(featureImage => <div> 
-                <img 
+              featureImageList.map(featureImage => <div key={featureImage.id}> 
+                <img
+                key={featureImage.id} 
                 src={featureImage.image}
                 className='w-full h-[300px] object-cover rounded-lg' 
                 />

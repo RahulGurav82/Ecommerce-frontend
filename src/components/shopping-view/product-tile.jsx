@@ -18,7 +18,7 @@ const ShoppingProductTile = ({ product, handleGetProductDetails, handleAddtoCart
             product?.totalStock == 0 ? <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
               Out Of Stock
             </Badge> : product?.totalStock  < 10 ? <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
-              `only ${product?.totalStock} items left`
+              only {product?.totalStock} items left
             </Badge> :
           product?.salePrice > 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">

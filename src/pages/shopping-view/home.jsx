@@ -33,13 +33,13 @@ import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImage } from "@/store/common-slice";
 
 const ShoppingHome = () => {
+  const { featureImageList } = useSelector(state => state.commonFeature);
   const slides = featureImageList;
   const [currentSlide, setCurrentSlide] = useState(0);
   const dispatch = useDispatch();
   const { productList, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
-  const { featureImageList } = useSelector((state) => state.commonSlice);
 
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth);
@@ -204,11 +204,12 @@ const ShoppingHome = () => {
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
-              ? productList.map((productItem) => (
+              ? productList.map((productItem, idx) => (
                   <ShoppingProductTile
                     handleGetProductDetails={handleGetProductDetails}
                     handleAddtoCart={handleAddtoCart}
                     product={productItem}
+                    key={idx}
                   />
                 ))
               : null}

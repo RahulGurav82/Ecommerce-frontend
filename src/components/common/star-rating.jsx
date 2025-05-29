@@ -3,8 +3,9 @@ import { Button } from "../ui/button";
 import { StarIcon } from "lucide-react";
 
 const StarRatingComponent = ({ rating, handleRatingChange }) => {
-  return [1, 2, 3, 4, 5].map((star) => (
+  return [1, 2, 3, 4, 5].map((star, idx) => (
     <Button
+    key={idx}
       variant="outline"
       size="icon"
       className={`p-2 rounded-full transition-colors ${

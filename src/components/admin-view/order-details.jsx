@@ -11,23 +11,30 @@ const initialFormData = {
   status: "",
 };
 
-const AdminOrderDetailsView = ({ orderDetails }) => {
+const AdminOrderDetailsView = ({ orderDetails, setOpenDetailsDialog }) => {
   const [formData, setFormData] = useState(initialFormData);
   const {user} = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
-  const handleUpdateStatus = (event) => {
+const handleUpdateStatus = (event) => {
     event.preventDefault();
-    const {status} = formData;
-    dispatch(updateOrderStatus({ id : orderDetails?._id, status})).then((data) => {
-        if(data?.payload?.sucess) {
+    const orderStatus = formData.status;
+    // console.log(orderStatus, "orderStatus")
+    
+    dispatch(updateOrderStatus({ id : orderDetails?._id, orderStatus})).then((data) => {
+        if(data?.payload?.success) {
             dispatch(getOrderDetailsForAdmin(orderDetails?._id));
-            setFormData(initialFormData); 
             dispatch(getAllOrdersForAdmin());
+            setFormData(initialFormData); 
+            setOpenDetailsDialog(false)
             toast(data?.payload?.message)
+        } else {
+          toast(data?.payload?.message)
         }
     })
   };
+
+
   return (
     <DialogContent className="sm:max-w-[600px]">
       <div className="grid gap-6">
@@ -94,13 +101,13 @@ const AdminOrderDetailsView = ({ orderDetails }) => {
                 label: "Order Status",
                 name: "status",
                 componentType: "select",
-                options: [
-                  { id: "pending", label: "Pending" },
-                  { id: "inProcess", label: "In Process" },
-                  { id: "isShipping", label: "In Shipping" },
-                  { id: "deliverd", label: "Deliverd" },
-                  { id: "rejected", label: "Rejected" },
-                ],
+              options: [
+                { id: "pending", label: "Pending" },
+                { id: "confirmed", label: "Confirmed" },
+                { id: "shipped", label: "Shipped" },
+                { id: "delivered", label: "Delivered" },
+                { id: "cancelled", label: "Cancelled" },
+              ],
               },
             ]}
             formData={formData}

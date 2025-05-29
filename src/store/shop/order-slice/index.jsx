@@ -2,27 +2,27 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
 
 const initialState = {
-    approvalUrl : '',
     isLoading : false,
     orderId : null,
     orderList : [],
     orderDetails : null,
 }
 
-export const createNewOrder = createAsyncThunk('/order/createNewOrder', async (orderData) => {
-    const response = await axios.post('http://localhost:5000/api/shop/order/create', orderData);
+export const createRazorpayOrder = createAsyncThunk('/order/createNewOrder', async (orderData) => {
+    const response = await axios.post('http://localhost:5000/api/shop/order/razorpay', orderData);
     return response?.data;
 });
-export const capturePayment = createAsyncThunk('/order/capturePayment', async ({orderId, paypalOrderId}) => {
-    const response = await axios.post('http://localhost:5000/api/shop/order/capture', {orderId, paypalOrderId});
+export const verifyRazorpayPayment = createAsyncThunk('/order/capturePayment', async (verificationData) => {
+    const response = await axios.post('http://localhost:5000/api/shop/order/verify-razorpay', verificationData);
     return response?.data;
 });
-export const getAllOrdersByUser = createAsyncThunk('/order/getAllOrdersByUser', async (userId) => {
-    const response = await axios.post(`http://localhost:5000/api/shop/order/list/${userId}`);
+export const getAllOrdersByUserId = createAsyncThunk('/order/getAllOrdersByUser', async (userId) => {
+    const response = await axios.get(`http://localhost:5000/api/shop/order/list/${userId}`);
     return response?.data;
 });
 export const getOrderDetails = createAsyncThunk('/order/getOrderDetails', async (id) => {
-    const response = await axios.post(`http://localhost:5000/api/shop/order/list/${id}`);
+    console.log("getOrderDetails", id);
+    const response = await axios.get(`http://localhost:5000/api/shop/order/details/${id}`);
     return response?.data;
 });
 
@@ -35,24 +35,28 @@ const shoppingOrderSlice = createSlice({
         }
     },
     extraReducers : (builder) => {
-        builder.addCase(createNewOrder.pending, (state) => {
+        builder.addCase(createRazorpayOrder.pending, (state) => {
             state.isLoading = true
-        }).addCase(createNewOrder.fulfilled, (state, action) => {
+        }).addCase(createRazorpayOrder.fulfilled, (state, action) => {
             state.isLoading = false
             state.orderId = action.payload.orderId
-            state.approvalUrl = action.payload.approvalUrl
             sessionStorage.setItem("currentOrderId", JSON.stringify(action.payload.orderId));
-        }).addCase(getAllOrdersByUser.pending, (state) => {
+        }).addCase(createRazorpayOrder.rejected, (state, action) => {
+            state.isLoading = false
+            state.orderId = []
+            sessionStorage.setItem("currentOrderId", JSON.stringify(action.payload.orderId));
+        }).addCase(getAllOrdersByUserId.pending, (state) => {
             state.isLoading = true
-        }).addCase(getAllOrdersByUser.fulfilled, (state,  action) => {
+        }).addCase(getAllOrdersByUserId.fulfilled, (state,  action) => {
             state.isLoading = false
             state.orderList = action.payload.data
-        }).addCase(getAllOrdersByUser.rejected, (state) => {
+        }).addCase(getAllOrdersByUserId.rejected, (state) => {
             state.isLoading = false
             state.orderList = []
         }).addCase(getOrderDetails.pending, (state) => {
             state.isLoading = true
         }).addCase(getOrderDetails.fulfilled, (state,  action) => {
+            console.log(action.payload, "ot");
             state.isLoading = false
             state.orderDetails = action.payload.data
         }).addCase(getOrderDetails.rejected, (state) => {
