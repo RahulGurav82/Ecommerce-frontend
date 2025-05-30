@@ -33,7 +33,6 @@ const CommonForm = ({
   const renderInputByComponentType = (getControlItem, index) => {
     let element = null;
     const value = formData[getControlItem.name] || "";
-
     switch (getControlItem.componentType) {
       case "input":
         element = (
@@ -70,6 +69,50 @@ const CommonForm = ({
             />
           </motion.div>
         );
+        break;
+      case "select":
+        element = (
+          <Select
+            onValueChange={(value) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: value,
+              })
+            }
+            value={value}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={getControlItem.label} />
+            </SelectTrigger>
+            <SelectContent>
+              {getControlItem.options && getControlItem.options.length > 0
+                ? getControlItem.options.map((optionItem) => (
+                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                      {optionItem.label}
+                    </SelectItem>
+                  ))
+                : null}
+            </SelectContent>
+          </Select>
+        );
+
+        break;
+      case "textarea":
+        element = (
+          <Textarea
+            name={getControlItem.name}
+            placeholder={getControlItem.placeholder}
+            id={getControlItem.id}
+            value={value}
+            onChange={(event) =>
+              setFormData({
+                ...formData,
+                [getControlItem.name]: event.target.value,
+              })
+            }
+          />
+        );
+
         break;
       default:
         element = (
@@ -109,6 +152,7 @@ const CommonForm = ({
     >
       <div className="flex flex-col gap-4">
         {formControls.map((controlItem, index) => (
+          
           <motion.div
             className="grid w-full gap-2"
             key={controlItem.name}
@@ -118,6 +162,7 @@ const CommonForm = ({
           >
             <label className="text-sm font-medium text-gray-700 mb-1">
               {controlItem.label}
+              {console.log(controlItem.label, "controlItem")}
             </label>
             {renderInputByComponentType(controlItem, index)}
           </motion.div>

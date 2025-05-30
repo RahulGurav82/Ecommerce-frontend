@@ -101,13 +101,13 @@ const handleUpdateStatus = (event) => {
                 label: "Order Status",
                 name: "status",
                 componentType: "select",
-              options: [
-                { id: "pending", label: "Pending" },
-                { id: "confirmed", label: "Confirmed" },
-                { id: "shipped", label: "Shipped" },
-                { id: "delivered", label: "Delivered" },
-                { id: "cancelled", label: "Cancelled" },
-              ],
+                options: [
+                  { id: "pending", label: "Pending" },
+                  { id: "confirmed", label: "Confirmed" },
+                  { id: "shipped", label: "Shipped" },
+                  { id: "delivered", label: "Delivered" },
+                  { id: "cancelled", label: "Cancelled" },
+                ],
               },
             ]}
             formData={formData}
