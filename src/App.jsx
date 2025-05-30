@@ -21,6 +21,7 @@ import { checkAuth } from "./store/auth-slice"
 // import PaypalReturnPage from "./pages/shopping-view/paypal-return"
 // import PaymentSuccessPage from "./pages/shopping-view/payment-success"
 import SearchProducts from "./pages/shopping-view/search"
+import LoadingSpinner from "./components/common/Loading"
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if(isLoading) return <div>Loading....</div>
+  if(isLoading) return <LoadingSpinner />
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">

@@ -162,7 +162,6 @@ const CommonForm = ({
           >
             <label className="text-sm font-medium text-gray-700 mb-1">
               {controlItem.label}
-              {console.log(controlItem.label, "controlItem")}
             </label>
             {renderInputByComponentType(controlItem, index)}
           </motion.div>
