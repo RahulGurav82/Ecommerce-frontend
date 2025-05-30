@@ -9,20 +9,20 @@ const initialState = {
 }
 
 export const createRazorpayOrder = createAsyncThunk('/order/createNewOrder', async (orderData) => {
-    const response = await axios.post('http://localhost:5000/api/shop/order/razorpay', orderData);
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/shop/order/razorpay`, orderData);
     return response?.data;
 });
 export const verifyRazorpayPayment = createAsyncThunk('/order/capturePayment', async (verificationData) => {
-    const response = await axios.post('http://localhost:5000/api/shop/order/verify-razorpay', verificationData);
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/shop/order/verify-razorpay`, verificationData);
     return response?.data;
 });
 export const getAllOrdersByUserId = createAsyncThunk('/order/getAllOrdersByUser', async (userId) => {
-    const response = await axios.get(`http://localhost:5000/api/shop/order/list/${userId}`);
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/shop/order/list/${userId}`);
     return response?.data;
 });
 export const getOrderDetails = createAsyncThunk('/order/getOrderDetails', async (id) => {
     console.log("getOrderDetails", id);
-    const response = await axios.get(`http://localhost:5000/api/shop/order/details/${id}`);
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/api/shop/order/details/${id}`);
     return response?.data;
 });
 

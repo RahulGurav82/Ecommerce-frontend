@@ -9,7 +9,7 @@ const initialState = {
 
 export const loginUser = createAsyncThunk("/auth/login", async (FormData) => {
   const response = await axios.post(
-    "http://localhost:5000/api/auth/login",
+    `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
     FormData,
     {
       withCredentials: true,
@@ -21,7 +21,8 @@ export const loginUser = createAsyncThunk("/auth/login", async (FormData) => {
 
 export const logoutUser = createAsyncThunk("/auth/logout", async (FormData) => {
   const response = await axios.post(
-    "http://localhost:5000/api/auth/logout",{},
+    `${import.meta.env.VITE_BASE_URL}/api/auth/logout`,
+    {},
     {
       withCredentials: true,
     }
@@ -32,7 +33,7 @@ export const logoutUser = createAsyncThunk("/auth/logout", async (FormData) => {
 
 export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
   const response = await axios.get(
-    "http://localhost:5000/api/auth/check-auth",
+    `${import.meta.env.VITE_BASE_URL}/api/auth/check-auth`,
     {
       withCredentials: true,
       headers: {
@@ -50,7 +51,7 @@ export const registerUser = createAsyncThunk(
   "/auth/register",
   async (FormData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/auth/register",
+      `${import.meta.env.VITE_BASE_URL}/api/auth/register`,
       FormData,
       {
         withCredentials: true,
@@ -107,7 +108,8 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-      }).addCase(logoutUser.fulfilled, (state) => {
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
