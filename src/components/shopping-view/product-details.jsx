@@ -91,6 +91,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         toast.success("Review added");
         setRating(0);
         setReviewMsg("");
+      } else {
+        toast.warning("You need to purchase product to review it.");
       }
     });
   };
