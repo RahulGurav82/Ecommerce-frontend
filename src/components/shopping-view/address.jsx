@@ -11,6 +11,7 @@ import {
 } from "@/store/shop/address-slice";
 import AddressCard from "./address-card";
 import { toast } from "sonner";
+import LoadingSpinner from "../common/Loading";
 
 const initialAddressFormdata = {
   address: "",
@@ -24,9 +25,10 @@ const Address = ({setcurrentSelectedAddress, selectedId}) => {
   const [formData, setFormData] = useState(initialAddressFormdata);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { addressList } = useSelector((state) => state.shopAddress);
+  const { addressList, isLoading } = useSelector((state) => state.shopAddress);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
+  if(isLoading) return <LoadingSpinner />
   const handleManageAddress = (event) => {
     event.preventDefault();
 

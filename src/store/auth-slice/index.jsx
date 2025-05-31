@@ -12,7 +12,7 @@ export const loginUser = createAsyncThunk("/auth/login", async (FormData) => {
     `${import.meta.env.VITE_BASE_URL}/api/auth/login`,
     FormData,
     {
-      withCredentials: true,
+      withCredentials : true,
     }
   );
 
