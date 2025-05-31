@@ -91,8 +91,6 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         toast.success("Review added");
         setRating(0);
         setReviewMsg("");
-      } else {
-        toast.warning("You need to purchase product to review it.");
       }
     });
   };
@@ -111,7 +109,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      <DialogContent className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-4 sm:p-6 max-w-[95vw] sm:max-w-[90vw] lg:max-w-[80vw] xl:max-w-[70vw]">
+      <DialogContent className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4 sm:p-6 max-w-[95vw] sm:max-w-[90vw] lg:max-w-[80vw] xl:max-w-[70vw] max-h-[90vh] sm:max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Product Image */}
         <motion.div
           className="relative overflow-hidden rounded-lg bg-muted/50"
