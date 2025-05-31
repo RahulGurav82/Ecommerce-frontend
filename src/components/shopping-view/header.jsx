@@ -319,7 +319,7 @@ const ShoppingHeader = () => {
         <motion.div whileHover={{ scale: 1.03 }}>
           <Link to="/shop/home" className="flex items-center gap-2">
             <HousePlug className="h-6 w-6 text-primary" />
-            <span className="font-bold text-xl">Ecommerce</span>
+            <span className="font-bold text-xl">ShopHub</span>
           </Link>
         </motion.div>
 
@@ -364,7 +364,7 @@ const ShoppingHeader = () => {
                     onClick={() => setOpen(false)}
                   >
                     <HousePlug className="h-6 w-6 text-primary" />
-                    <span className="font-bold text-lg">Ecommerce</span>
+                    <span className="font-bold text-lg">ShopHub</span>
                   </Link>
                 </div>
 
