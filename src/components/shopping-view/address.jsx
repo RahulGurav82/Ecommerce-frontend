@@ -21,21 +21,22 @@ const initialAddressFormdata = {
   notes: "",
 };
 
-const Address = ({setcurrentSelectedAddress, selectedId}) => {
+const Address = ({ setcurrentSelectedAddress, selectedId }) => {
   const [formData, setFormData] = useState(initialAddressFormdata);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { addressList, isLoading } = useSelector((state) => state.shopAddress);
   const [currentEditedId, setCurrentEditedId] = useState(null);
 
-  if(isLoading) return <LoadingSpinner />
+  // if (isLoading) return <LoadingSpinner />
+
   const handleManageAddress = (event) => {
     event.preventDefault();
 
-    if(addressList.length >= 3 && currentEditedId === null) {
-        setFormData(initialAddressFormdata)
-        toast.warning("You can added max 3 address");
-        return
+    if (addressList.length >= 3 && currentEditedId === null) {
+      setFormData(initialAddressFormdata);
+      toast.warning("You can added max 3 address");
+      return;
     }
 
     currentEditedId !== null
@@ -46,12 +47,12 @@ const Address = ({setcurrentSelectedAddress, selectedId}) => {
             formData,
           })
         ).then((data) => {
-            if(data?.payload?.success) {
-                dispatch(fetchAllAddresses(user?.id));
-                setCurrentEditedId(null);
-                setFormData(initialAddressFormdata)
-                toast.success("Address update successful");
-            }
+          if (data?.payload?.success) {
+            dispatch(fetchAllAddresses(user?.id));
+            setCurrentEditedId(null);
+            setFormData(initialAddressFormdata);
+            toast.success("Address update successful");
+          }
         })
       : dispatch(
           addNewAddress({
@@ -62,7 +63,7 @@ const Address = ({setcurrentSelectedAddress, selectedId}) => {
           if (data?.payload?.success) {
             dispatch(fetchAllAddresses(user?.id));
             setFormData(initialAddressFormdata);
-            toast.success("address addedd")
+            toast.success("address addedd");
           }
         });
   };
@@ -105,7 +106,7 @@ const Address = ({setcurrentSelectedAddress, selectedId}) => {
         {addressList && addressList.length > 0
           ? addressList.map((singleAddress, idx) => (
               <AddressCard
-              key={idx}
+                key={idx}
                 selectedId={selectedId}
                 addressInfo={singleAddress}
                 handleDeleteAddress={handleDeleteAddress}
