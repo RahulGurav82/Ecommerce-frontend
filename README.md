@@ -39,6 +39,10 @@ Visit the live application: [ShopHub](https://ecommerce-frontend-nine-rouge.verc
 ![ShopHub Home Page](https://github.com/user-attachments/assets/ebe58331-037a-4da1-9837-e599f30948ad)
 *Modern, responsive home page with featured products and intuitive navigation*
 
+### 🏠 Admin Dashboard
+![ShopHub Admin Page](https://github.com/user-attachments/assets/b5e8a126-0bba-4c41-8f6b-2c450e3f1f93)
+*Modern, responsive admin page with featured products and orders navigation*
+
 ## 🛠️ Tech Stack
 
 ### Frontend
